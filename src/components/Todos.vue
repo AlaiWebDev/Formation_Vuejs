@@ -9,7 +9,7 @@
    <div class="main">
 
      <ul class="todo-list">
-       <li class="" :key="todo" v-for="todo in todos" :class="{completed: todo.completed}">
+       <li class="" :key="todo" v-for="todo in filterTaskbyState" :class="{completed: todo.completed}">
          <div class="view">
 
             <input type="checkbox" class="toggle" v-model="todo.completed"/>
@@ -26,7 +26,24 @@
 
    </div>
 
-  <footer></footer>
+  <footer>
+    <div class="select-filter">
+      <div>
+  <input type="radio" id="all" name="filter" value="all" v-model="selectedState"
+         checked>
+  <label for="all">All</label>
+</div>
+<div>
+  <input type="radio" id="completed" name="filter" value="completed" v-model="selectedState">
+  <label for="completed">Completed</label>
+</div>
+
+<div>
+  <input type="radio" id="uncompleted" name="filter" value="uncompleted" v-model="selectedState">
+  <label for="uncompleted">Uncompleted</label>
+</div>
+    </div>
+  </footer>
 
 
 </section>
@@ -40,9 +57,9 @@ export default {
 
        return{
 
-
               todos:[],
-              newTodo:''
+              newTodo:'',
+              selectedState: "All"
        }
   },
 
@@ -51,13 +68,25 @@ export default {
     addTodo()
     {
       this.todos.push({
-          name:this.newTodo,
-          completed : false
+          name: this.newTodo,
+          completed: false
       });
       this.newTodo = '';
 
     }
   },
+  computed: {
+    filterTaskbyState: function() {
+      if (this.selectedState === "completed") {
+        return this.todos.filter(todo => todo.completed);
+      }
+      if (this.selectedState === "uncompleted") {
+        return this.todos.filter(todo => !todo.completed);
+      } else {
+        return this.todos;
+      }
+    }
+  }
 
 }
 </script>
